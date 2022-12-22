@@ -13,10 +13,10 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
 public class Photo {
 
     @Id
@@ -29,7 +29,7 @@ public class Photo {
     private String path;
 
     @Column(nullable = false)
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = { "dd.MM.yyyy" })
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = {"dd.MM.yyyy"})
     @NotNull(message = "Введите Дату загрузки")
     private LocalDate uploadDate;
 

@@ -15,10 +15,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
 public class Policy {
 
     @Id
@@ -39,12 +39,12 @@ public class Policy {
     private int insuranceAmount;
 
     @Column(nullable = false)
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = { "dd.MM.yyyy" })
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = {"dd.MM.yyyy"})
     @NotNull(message = "Введите Дату заключения")
     private LocalDate dateOfConclusion;
 
     @Column(nullable = false)
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = { "dd.MM.yyyy" })
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = {"dd.MM.yyyy"})
     @NotNull(message = "Введите Дату окончания действия")
     private LocalDate expirationDate;
 

@@ -13,10 +13,10 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
 public class InsuranceEvent {
 
     @Id
@@ -24,7 +24,7 @@ public class InsuranceEvent {
     private Long id;
 
     @Column(nullable = false)
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = { "dd.MM.yyyy" })
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = {"dd.MM.yyyy"})
     @NotNull(message = "Введите Дату")
     private LocalDate incidentDate;
 

@@ -16,10 +16,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
 public class Employee {
 
     @Id
@@ -32,7 +32,7 @@ public class Employee {
     private String fullName;
 
     @Column(nullable = false)
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = { "dd.MM.yyyy" })
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = {"dd.MM.yyyy"})
     @NotNull(message = "Введите Дату рождения")
     private LocalDate birthday;
 
@@ -49,8 +49,8 @@ public class Employee {
 
     @Column(length = 10, unique = true, nullable = false)
     @Pattern(regexp = "^[0-9]*$", message = "Паспорт может включать только цифры")
-    @Size(min = 10, max = 10, message = "Пасспорт должен содержать 10 цифр")
-    @NotNull(message = "Введите Номер телефона")
+    @Size(min = 10, max = 10, message = "Паспорт должен содержать 10 цифр")
+    @NotNull(message = "Введите Паспорт")
     private String passport;
 
     @OneToMany(mappedBy = "employee")

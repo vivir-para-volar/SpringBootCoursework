@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Menu</title>
 </head>
 <body>
 
@@ -31,10 +31,10 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark">
                         <li><a class="dropdown-item" th:href="@{/car/list}">Автомобили</a></li>
-                        <li><a class="dropdown-item" href="#">Лица, допущенные к управлению</a></li>
-                        <li><a class="dropdown-item" href="#">Страхователи</a></li>
-                        <li><a class="dropdown-item" href="#">Страховые случаи</a></li>
-                        <li><a class="dropdown-item" href="#">Сотрудники</a></li>
+                        <li><a class="dropdown-item" th:href="@{/personAllowedToDrive/list}">Лица, допущенные к управлению</a></li>
+                        <li><a class="dropdown-item" th:href="@{/policyholder/list}">Страхователи</a></li>
+                        <li><a class="dropdown-item" th:href="@{/insuranceEvent/list}">Страховые случаи</a></li>
+                        <li><a class="dropdown-item" th:href="@{/employee/list}">Сотрудники</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">

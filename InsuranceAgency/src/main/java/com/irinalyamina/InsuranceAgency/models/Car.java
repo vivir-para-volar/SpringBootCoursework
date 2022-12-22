@@ -12,10 +12,10 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
 public class Car {
 
     @Id
