@@ -6,6 +6,7 @@ import com.irinalyamina.InsuranceAgency.services.InsuranceEventService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
@@ -37,5 +38,17 @@ public class InsuranceEventController {
 
         model.addAttribute("insuranceEvents", list);
         return "insuranceEvent/list";
+    }
+
+    @GetMapping("/details/{id}")
+    public String details(Model model, @PathVariable("id") Long id) {
+        InsuranceEvent insuranceEvent = insuranceEventService.getById(id);
+        model.addAttribute("insuranceEvent", insuranceEvent);
+        model.addAttribute("policy", insuranceEvent.getPolicy());
+        model.addAttribute("policyholder", insuranceEvent.getPolicy().getPolicyholder());
+        model.addAttribute("car", insuranceEvent.getPolicy().getCar());
+        model.addAttribute("employee", insuranceEvent.getPolicy().getEmployee());
+        model.addAttribute("personsAllowedToDrive", insuranceEvent.getPolicy().getPersonsAllowedToDrive());
+        return "insuranceEvent/details";
     }
 }

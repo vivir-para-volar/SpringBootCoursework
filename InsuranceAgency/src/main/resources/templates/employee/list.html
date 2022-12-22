@@ -17,7 +17,7 @@
 <div class="container pt-3 pb-5">
     <h2>Список сотрудников</h2>
 
-    <p class="pt-2 pb-2"><a class="link-dark" th:href="@{/employee/create}">Добавить нового</a></p>
+    <p class="pt-2 pb-2"><a class="link-dark" th:href="@{'/employee/create'}">Добавить нового</a></p>
 
     <table class="table">
         <thead>
@@ -41,13 +41,13 @@
             <td th:text="${employee.passport}"/>
             <td>
                 <a class="btn btn btn-outline-info"
-                   th:href="@{/employee/details/ + ${employee.id}}">Подробнее</a>
+                   th:href="@{'/employee/details/' + ${employee.id}}">Подробнее</a>
             </td>
             <td>
-                <a class="btn btn-outline-secondary" th:href="@{/employee/edit/ + ${employee.id}}">Изменить</a>
+                <a class="btn btn-outline-secondary" th:href="@{'/employee/edit/' + ${employee.id}}">Изменить</a>
             </td>
             <td>
-                <a class="btn btn-outline-danger" th:href="@{/employee/delete/ + ${employee.id}}">Удалить</a>
+                <a class="btn btn-outline-danger" th:href="@{'/employee/delete/' + ${employee.id}}">Удалить</a>
             </td>
         </tr>
         </tbody>

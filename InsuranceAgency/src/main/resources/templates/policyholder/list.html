@@ -17,7 +17,7 @@
 <div class="container pt-3 pb-5">
     <h2>Список страхователей</h2>
 
-    <p class="pt-2 pb-2"><a class="link-dark" th:href="@{/policyholder/create}">Добавить нового</a></p>
+    <p class="pt-2 pb-2"><a class="link-dark" th:href="@{'/policyholder/create'}">Добавить нового</a></p>
 
     <table class="table">
         <thead>
@@ -41,13 +41,13 @@
             <td th:text="${policyholder.passport}"/>
             <td>
                 <a class="btn btn btn-outline-info"
-                   th:href="@{/policyholder/details/ + ${policyholder.id}}">Подробнее</a>
+                   th:href="@{'/policyholder/details/' + ${policyholder.id}}">Подробнее</a>
             </td>
             <td>
-                <a class="btn btn-outline-secondary" th:href="@{/policyholder/edit/ + ${policyholder.id}}">Изменить</a>
+                <a class="btn btn-outline-secondary" th:href="@{'/policyholder/edit/' + ${policyholder.id}}">Изменить</a>
             </td>
             <td>
-                <a class="btn btn-outline-danger" th:href="@{/policyholder/delete/ + ${policyholder.id}}">Удалить</a>
+                <a class="btn btn-outline-danger" th:href="@{'/policyholder/delete/' + ${policyholder.id}}">Удалить</a>
             </td>
         </tr>
         </tbody>

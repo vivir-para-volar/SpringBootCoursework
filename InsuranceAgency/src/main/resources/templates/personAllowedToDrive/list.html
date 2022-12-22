@@ -17,7 +17,7 @@
 <div class="container pt-3 pb-5">
     <h2>Список лиц, допущенных к управлению</h2>
 
-    <p class="pt-2 pb-2"><a class="link-dark" th:href="@{/personAllowedToDrive/create}">Добавить новое</a></p>
+    <p class="pt-2 pb-2"><a class="link-dark" th:href="@{'/personAllowedToDrive/create'}">Добавить новое</a></p>
 
     <table class="table">
         <thead>
@@ -35,15 +35,15 @@
             <td th:text="${personAllowedToDrive.drivingLicence}"/>
             <td>
                 <a class="btn btn btn-outline-info"
-                   th:href="@{/personAllowedToDrive/details/ + ${personAllowedToDrive.id}}">Подробнее</a>
+                   th:href="@{'/personAllowedToDrive/details/' + ${personAllowedToDrive.id}}">Подробнее</a>
             </td>
             <td>
                 <a class="btn btn-outline-secondary"
-                   th:href="@{/personAllowedToDrive/edit/ + ${personAllowedToDrive.id}}">Изменить</a>
+                   th:href="@{'/personAllowedToDrive/edit/' + ${personAllowedToDrive.id}}">Изменить</a>
             </td>
             <td>
                 <a class="btn btn-outline-danger"
-                   th:href="@{/personAllowedToDrive/delete/ + ${personAllowedToDrive.id}}">Удалить</a>
+                   th:href="@{'/personAllowedToDrive/delete/' + ${personAllowedToDrive.id}}">Удалить</a>
             </td>
         </tr>
         </tbody>

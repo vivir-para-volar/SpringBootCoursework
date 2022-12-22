@@ -41,11 +41,11 @@
             <td th:text="${insuranceEvent.carModel}"/>
             <td>
                 <a class="btn btn btn-outline-info"
-                   th:href="@{/insuranceEvent/details/ + ${insuranceEvent.id}}">Подробнее</a>
+                   th:href="@{'/insuranceEvent/details/' + ${insuranceEvent.id}}">Подробнее</a>
             </td>
             <td>
                 <a class="btn btn-outline-danger"
-                   th:href="@{/insuranceEvent/delete/ + ${insuranceEvent.id}}">Удалить</a>
+                   th:href="@{'/insuranceEvent/delete/' + ${insuranceEvent.id}}">Удалить</a>
             </td>
         </tr>
         </tbody>
