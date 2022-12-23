@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -30,10 +31,10 @@ public class InsuranceEvent {
 
     @Column(nullable = false)
     @NotNull(message = "Введите Страховую выплату")
-    private int insurancePayment;
+    private Integer insurancePayment;
 
     @Column(length = 1000, nullable = false)
-    @NotNull(message = "Введите Описание")
+    @NotEmpty(message = "Введите Описание")
     @Size(max = 1000, message = "Описание не должно превышать 1000 символов")
     private String description;
 

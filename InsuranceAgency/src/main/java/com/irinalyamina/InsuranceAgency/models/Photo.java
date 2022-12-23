@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -24,7 +25,7 @@ public class Photo {
     private Long id;
 
     @Column(length = 100, unique = true, nullable = false)
-    @NotNull(message = "Введите Путь")
+    @NotEmpty(message = "Введите Путь")
     @Size(max = 100, message = "Путь не должен превышать 100 символов")
     private String path;
 

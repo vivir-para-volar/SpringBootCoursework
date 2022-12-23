@@ -22,4 +22,24 @@ public class EmployeeService {
     public Employee getById(Long id) {
         return employeeRepository.findById(id).get();
     }
+
+    public Employee create(Employee employee) {
+        return employeeRepository.save(employee);
+    }
+
+    public void deleteById(Long id) {
+        employeeRepository.deleteById(id);
+    }
+
+    public boolean checkTelephone(String telephone) {
+        return employeeRepository.existsByTelephone(telephone);
+    }
+
+    public boolean checkEmail(String email) {
+        return employeeRepository.existsByEmail(email);
+    }
+
+    public boolean checkPassport(String passport) {
+        return employeeRepository.existsByPassport(passport);
+    }
 }

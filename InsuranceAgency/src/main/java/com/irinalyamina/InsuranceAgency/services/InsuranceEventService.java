@@ -22,4 +22,8 @@ public class InsuranceEventService {
     public InsuranceEvent getById(Long id) {
         return insuranceEventRepository.findById(id).get();
     }
+
+    public void deleteById(Long id) {
+        insuranceEventRepository.deleteById(id);
+    }
 }

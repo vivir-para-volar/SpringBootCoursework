@@ -6,10 +6,11 @@ import com.irinalyamina.InsuranceAgency.modelsForLayout.PolicyForList;
 import com.irinalyamina.InsuranceAgency.services.EmployeeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -36,5 +37,45 @@ public class EmployeeController {
         model.addAttribute("employee", employee);
         model.addAttribute("policies", list);
         return "employee/details";
+    }
+
+    @GetMapping("/create")
+    public String createGet(Model model) {
+        model.addAttribute("employee", new Employee());
+        return "employee/create";
+    }
+
+    @PostMapping("/create")
+    public String createPost(@ModelAttribute("employee") @Valid Employee employee, BindingResult bindingResult) {
+        if (employeeService.checkTelephone(employee.getTelephone())) {
+            bindingResult.addError(new FieldError(
+                    "employee", "telephone",
+                    employee.getTelephone(),
+                    false, null, null,
+                    "Данный телефон уже используется")
+            );
+        }
+        if (employeeService.checkEmail(employee.getEmail())) {
+            bindingResult.addError(new FieldError(
+                    "employee", "email",
+                    employee.getEmail(),
+                    false, null, null,
+                    "Данный Email уже используется")
+            );
+        }
+        if (employeeService.checkPassport(employee.getPassport())) {
+            bindingResult.addError(new FieldError(
+                    "employee", "passport",
+                    employee.getPassport(),
+                    false, null, null,
+                    "Данный паспорт уже используется")
+            );
+        }
+        if (bindingResult.hasErrors()) {
+            return "employee/create";
+        }
+
+        employee = employeeService.create(employee);
+        return "redirect:/employee/details/" + employee.getId();
     }
 }

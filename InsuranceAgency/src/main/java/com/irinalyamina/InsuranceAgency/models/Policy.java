@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -26,17 +27,17 @@ public class Policy {
     private Long id;
 
     @Column(length = 5, nullable = false)
-    @NotNull(message = "Введите Вид страхования")
+    @NotEmpty(message = "Введите Вид страхования")
     @Size(min = 5, max = 5, message = "Вид страхования должен содержать 5 символов")
     private String insuranceType;
 
     @Column(nullable = false)
     @NotNull(message = "Введите Страховую сумму")
-    private int insurancePremium;
+    private Integer insurancePremium;
 
     @Column(nullable = false)
     @NotNull(message = "Введите Страховую премию")
-    private int insuranceAmount;
+    private Integer insuranceAmount;
 
     @Column(nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = {"dd.MM.yyyy"})

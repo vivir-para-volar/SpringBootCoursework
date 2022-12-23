@@ -19,7 +19,19 @@ public class CarService {
         return carRepository.findAll();
     }
 
+    public Car create(Car car) {
+        return carRepository.save(car);
+    }
+
     public Car getById(Long id) {
         return carRepository.findById(id).get();
+    }
+
+    public void deleteById(Long id) {
+        carRepository.deleteById(id);
+    }
+
+    public boolean checkVin(String vin) {
+        return carRepository.existsByVin(vin);
     }
 }
