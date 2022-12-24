@@ -44,13 +44,7 @@ public class PolicyController {
 
     @PostMapping("/edit")
     public String editPost(@ModelAttribute("policy") @Valid Policy policy, BindingResult bindingResult) {
-        Policy policyOld = policyService.getById(policy.getId());
-        policy.setPolicyholder(policyOld.getPolicyholder());
-        policy.setCar(policyOld.getCar());
-        policy.setEmployee(policyOld.getEmployee());
-        policy.setPersonsAllowedToDrive(policyOld.getPersonsAllowedToDrive());
-
-        checkForErrorsDuringEdit(policy, policyOld, bindingResult);
+        checkForErrorsDuringEdit(policy, bindingResult);
         if (bindingResult.hasErrors()) {
             return "policy/edit";
         }
@@ -59,7 +53,7 @@ public class PolicyController {
         return "redirect:/policy/details/" + policy.getId();
     }
 
-    private void checkForErrors(Policy policy, BindingResult bindingResult){
+    private void checkForErrors(Policy policy, BindingResult bindingResult) {
         if (policy.getInsurancePremium() <= 0) {
             bindingResult.addError(new FieldError(
                     "policy", "insurancePremium",
@@ -84,8 +78,7 @@ public class PolicyController {
                     "Страховая премия не может быть больше или равна Страховой сумме")
             );
         }
-        if(policy.getExpirationDate().isBefore(policy.getDateOfConclusion()))
-        {
+        if (policy.getExpirationDate().isBefore(policy.getDateOfConclusion())) {
             bindingResult.addError(new FieldError(
                     "policy", "expirationDate",
                     policy.getExpirationDate(),
@@ -95,9 +88,10 @@ public class PolicyController {
         }
     }
 
-    private void checkForErrorsDuringEdit(Policy policy, Policy policyOld, BindingResult bindingResult){
+    private void checkForErrorsDuringEdit(Policy policy, BindingResult bindingResult) {
         checkForErrors(policy, bindingResult);
 
+        Policy policyOld = policyService.getById(policy.getId());
         if (policy.getExpirationDate().isAfter(policyOld.getExpirationDate())) {
             bindingResult.addError(new FieldError(
                     "policy", "expirationDate",

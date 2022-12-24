@@ -15,7 +15,7 @@
 <div th:replace="~{menu :: navigation}"></div>
 
 <div class="container pt-3 pb-5">
-    <h2>Изменить информацию о полисе</h2>
+    <h2>Изменение информации о полисе</h2>
     <hr/>
 
     <div class="mb-5">
@@ -35,7 +35,8 @@
                 <div class="col-md-6 col-lg-4">
                     <input class="form-control" th:field="*{insurancePremium}" type="number">
                 </div>
-                <div class="form-text text-danger" th:if="${#fields.hasErrors('insurancePremium')}" th:errors="*{insurancePremium}"/>
+                <div class="form-text text-danger" th:if="${#fields.hasErrors('insurancePremium')}"
+                     th:errors="*{insurancePremium}"/>
             </div>
 
             <input th:field="*{insuranceAmount}" type="number" hidden>
@@ -59,7 +60,8 @@
                 <div class="col-md-6 col-lg-4">
                     <input class="form-control" th:field="*{expirationDate}" type="date">
                 </div>
-                <div class="form-text text-danger" th:if="${#fields.hasErrors('expirationDate')}" th:errors="*{expirationDate}"/>
+                <div class="form-text text-danger" th:if="${#fields.hasErrors('expirationDate')}"
+                     th:errors="*{expirationDate}"/>
             </div>
 
             <div class="row mb-3">
@@ -83,8 +85,13 @@
                 </div>
             </div>
 
+            <input th:field="*{policyholder}" hidden>
+            <input th:field="*{car}" hidden>
+            <input th:field="*{employee}" hidden>
+            <input th:field="*{personsAllowedToDrive}" hidden>
+
             <div class="row">
-                <div class="offset-4 offset-md-3 offset-lg-2">
+                <div class="col-1 offset-4 offset-md-3 offset-lg-2">
                     <button class="btn btn-primary" type="submit">Сохранить</button>
                 </div>
             </div>
@@ -92,7 +99,7 @@
     </div>
 
     <p>
-        <a class="link-dark" th:href="@{/policy/list}">Добавить страховой случай</a> |
+        <a class="link-dark" th:href="@{'/insuranceEvent/create/' + ${policy.id}}">Добавить страховой случай</a> |
         <a class="link-dark" th:href="@{/policy/list}">Лица, допущенные к управлению</a> |
         <a class="link-dark" th:href="@{/policy/list}">Вернуться к списку</a>
     </p>

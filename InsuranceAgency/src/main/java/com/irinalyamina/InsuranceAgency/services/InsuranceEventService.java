@@ -16,12 +16,16 @@ public class InsuranceEventService {
         this.insuranceEventRepository = insuranceEventRepository;
     }
 
-    public List<InsuranceEvent> list(){
+    public List<InsuranceEvent> list() {
         return insuranceEventRepository.findAll();
     }
 
     public InsuranceEvent getById(Long id) {
         return insuranceEventRepository.findById(id).get();
+    }
+
+    public InsuranceEvent create(InsuranceEvent insuranceEvent) {
+        return insuranceEventRepository.save(insuranceEvent);
     }
 
     public void deleteById(Long id) {

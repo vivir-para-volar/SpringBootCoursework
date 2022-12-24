@@ -2,7 +2,6 @@ package com.irinalyamina.InsuranceAgency.controllers;
 
 import com.irinalyamina.InsuranceAgency.models.PersonAllowedToDrive;
 import com.irinalyamina.InsuranceAgency.models.Policy;
-import com.irinalyamina.InsuranceAgency.models.Policyholder;
 import com.irinalyamina.InsuranceAgency.services.PersonAllowedToDriveService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

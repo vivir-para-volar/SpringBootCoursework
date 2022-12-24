@@ -3,12 +3,14 @@ package com.irinalyamina.InsuranceAgency.controllers;
 import com.irinalyamina.InsuranceAgency.extendedModels.InsuranceEventExtended;
 import com.irinalyamina.InsuranceAgency.models.InsuranceEvent;
 import com.irinalyamina.InsuranceAgency.services.InsuranceEventService;
+import com.irinalyamina.InsuranceAgency.services.PolicyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,16 +19,18 @@ import java.util.List;
 public class InsuranceEventController {
 
     private final InsuranceEventService insuranceEventService;
+    private final PolicyService policyService;
 
-    public InsuranceEventController(InsuranceEventService insuranceEventService) {
+    public InsuranceEventController(InsuranceEventService insuranceEventService, PolicyService policyService) {
         this.insuranceEventService = insuranceEventService;
+        this.policyService = policyService;
     }
 
     @GetMapping("/list")
     public String list(Model model) {
         List<InsuranceEvent> listInsuranceEvents = insuranceEventService.list();
         List<InsuranceEventExtended> list = new ArrayList<>();
-        for (var item: listInsuranceEvents) {
+        for (var item : listInsuranceEvents) {
             list.add(new InsuranceEventExtended(item));
         }
 
@@ -40,5 +44,52 @@ public class InsuranceEventController {
         model.addAttribute("insuranceEvent", insuranceEvent);
         model.addAttribute("policy", insuranceEvent.getPolicy());
         return "insuranceEvent/details";
+    }
+
+    @GetMapping("/create/{policyId}")
+    public String createGet(Model model, @PathVariable("policyId") Long policyId) {
+        var insuranceEvent = new InsuranceEvent();
+        insuranceEvent.setPolicy(policyService.getById(policyId));
+
+        model.addAttribute("insuranceEvent", insuranceEvent);
+        return "insuranceEvent/create";
+    }
+
+    @PostMapping("/create")
+    public String createPost(@ModelAttribute("insuranceEvent") @Valid InsuranceEvent insuranceEvent, BindingResult bindingResult) {
+        checkForErrors(insuranceEvent, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "insuranceEvent/create";
+        }
+
+        insuranceEvent = insuranceEventService.create(insuranceEvent);
+        return "redirect:/policy/details/" + insuranceEvent.getPolicy().getId();
+    }
+
+    private void checkForErrors(InsuranceEvent insuranceEvent, BindingResult bindingResult) {
+        if (insuranceEvent.getIncidentDate().isBefore(insuranceEvent.getPolicy().getDateOfConclusion())) {
+            bindingResult.addError(new FieldError(
+                    "insuranceEvent", "incidentDate",
+                    insuranceEvent.getIncidentDate(),
+                    false, null, null,
+                    "Дата не может быть меньше даты заключения полиса")
+            );
+        }
+        if (insuranceEvent.getIncidentDate().isAfter(insuranceEvent.getPolicy().getExpirationDate())) {
+            bindingResult.addError(new FieldError(
+                    "insuranceEvent", "incidentDate",
+                    insuranceEvent.getIncidentDate(),
+                    false, null, null,
+                    "Дата не может быть больше даты окончания действия полиса")
+            );
+        }
+        if (insuranceEvent.getPolicy().getInsuranceType().equals("КАСКО") && insuranceEvent.getInsurancePayment() > insuranceEvent.getPolicy().getInsuranceAmount()) {
+            bindingResult.addError(new FieldError(
+                    "insuranceEvent", "insurancePayment",
+                    insuranceEvent.getInsurancePayment(),
+                    false, null, null,
+                    "Страховая выплата должна быть меньше Страховой суммы")
+            );
+        }
     }
 }
