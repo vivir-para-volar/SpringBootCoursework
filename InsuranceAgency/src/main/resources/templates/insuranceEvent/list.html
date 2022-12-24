@@ -36,9 +36,9 @@
             <td th:text="${#temporals.format(insuranceEvent.incidentDate, 'dd.MM.yyyy')}"/>
             <td th:text="${insuranceEvent.insurancePayment}"/>
             <td th:text="${insuranceEvent.description}"/>
-            <td th:text="${insuranceEvent.insuranceType}"/>
-            <td th:text="${insuranceEvent.policyholderFullName}"/>
-            <td th:text="${insuranceEvent.carModel}"/>
+            <td th:text="${insuranceEvent.policy.insuranceType}"/>
+            <td th:text="${insuranceEvent.policyholder.fullName}"/>
+            <td th:text="${insuranceEvent.car.model}"/>
             <td>
                 <a class="btn btn btn-outline-info"
                    th:href="@{'/insuranceEvent/details/' + ${insuranceEvent.id}}">Подробнее</a>

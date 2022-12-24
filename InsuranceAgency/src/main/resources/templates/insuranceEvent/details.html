@@ -55,19 +55,19 @@
         <h4 class="pb-2">Страхователь</h4>
         <dl class="row">
             <dt class="col-sm-4 col-lg-3">ФИО</dt>
-            <dd class="col-sm-8 col-lg-9" th:text="${policyholder.fullName}"></dd>
+            <dd class="col-sm-8 col-lg-9" th:text="${policy.policyholder.fullName}"></dd>
 
             <dt class="col-sm-4 col-lg-3">Дата рождения</dt>
-            <dd class="col-sm-8 col-lg-9" th:text="${#temporals.format(policyholder.birthday, 'dd.MM.yyyy')}"></dd>
+            <dd class="col-sm-8 col-lg-9" th:text="${#temporals.format(policy.policyholder.birthday, 'dd.MM.yyyy')}"></dd>
 
             <dt class="col-sm-4 col-lg-3">Номер телефона</dt>
-            <dd class="col-sm-8 col-lg-9" th:text="${policyholder.telephone}"></dd>
+            <dd class="col-sm-8 col-lg-9" th:text="${policy.policyholder.telephone}"></dd>
 
             <dt class="col-sm-4 col-lg-3">Email</dt>
-            <dd class="col-sm-8 col-lg-9" th:text="${policyholder.email}"></dd>
+            <dd class="col-sm-8 col-lg-9" th:text="${policy.policyholder.email}"></dd>
 
             <dt class="col-sm-4 col-lg-3">Паспорт</dt>
-            <dd class="col-sm-8 col-lg-9" th:text="${policyholder.passport}"></dd>
+            <dd class="col-sm-8 col-lg-9" th:text="${policy.policyholder.passport}"></dd>
         </dl>
     </div>
 
@@ -75,16 +75,16 @@
         <h4 class="pb-2">Автомобиль</h4>
         <dl class="row">
             <dt class="col-sm-4 col-lg-3">Модель</dt>
-            <dd class="col-sm-8 col-lg-9" th:text="${car.model}"></dd>
+            <dd class="col-sm-8 col-lg-9" th:text="${policy.car.model}"></dd>
 
             <dt class="col-sm-4 col-lg-3">VIN</dt>
-            <dd class="col-sm-8 col-lg-9" th:text="${car.vin}"></dd>
+            <dd class="col-sm-8 col-lg-9" th:text="${policy.car.vin}"></dd>
 
             <dt class="col-sm-4 col-lg-3">Регистрационный знак</dt>
-            <dd class="col-sm-8 col-lg-9" th:text="${car.registrationPlate}"></dd>
+            <dd class="col-sm-8 col-lg-9" th:text="${policy.car.registrationPlate}"></dd>
 
             <dt class="col-sm-4 col-lg-3">Паспорт ТС</dt>
-            <dd class="col-sm-8 col-lg-9" th:text="${car.vehiclePassport}"></dd>
+            <dd class="col-sm-8 col-lg-9" th:text="${policy.car.vehiclePassport}"></dd>
         </dl>
     </div>
 
@@ -92,13 +92,13 @@
         <h4 class="pb-2">Сотрудник</h4>
         <dl class="row">
             <dt class="col-sm-4 col-lg-3">ФИО</dt>
-            <dd class="col-sm-8 col-lg-9" th:text="${employee.fullName}"></dd>
+            <dd class="col-sm-8 col-lg-9" th:text="${policy.employee.fullName}"></dd>
 
             <dt class="col-sm-4 col-lg-3">Номер телефона</dt>
-            <dd class="col-sm-8 col-lg-9" th:text="${employee.telephone}"></dd>
+            <dd class="col-sm-8 col-lg-9" th:text="${policy.employee.telephone}"></dd>
 
             <dt class="col-sm-4 col-lg-3">Email</dt>
-            <dd class="col-sm-8 col-lg-9" th:text="${employee.email}"></dd>
+            <dd class="col-sm-8 col-lg-9" th:text="${policy.employee.email}"></dd>
         </dl>
     </div>
 
@@ -112,7 +112,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="personAllowedToDrive : ${personsAllowedToDrive}">
+            <tr th:each="personAllowedToDrive : ${policy.personsAllowedToDrive}">
                 <td th:text="${personAllowedToDrive.fullName}"/>
                 <td th:text="${personAllowedToDrive.drivingLicence}"/>
             </tr>

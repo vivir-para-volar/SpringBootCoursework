@@ -49,8 +49,8 @@
                 <td th:text="${policy.insuranceAmount}"/>
                 <td th:text="${#temporals.format(policy.dateOfConclusion, 'dd.MM.yyyy')}"/>
                 <td th:text="${#temporals.format(policy.expirationDate, 'dd.MM.yyyy')}"/>
-                <td th:text="${policy.policyholderFullName}"/>
-                <td th:text="${policy.carModel}"/>
+                <td th:text="${policy.policyholder.fullName}"/>
+                <td th:text="${policy.car.model}"/>
             </tr>
             </tbody>
         </table>

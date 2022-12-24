@@ -31,7 +31,6 @@ public class PersonAllowedToDrive {
     @Column(length = 10, unique = true, nullable = false)
     @Pattern(regexp = "^[0-9]*$", message = "Водительское удостоверение может включать только цифры")
     @Size(min = 10, max = 10, message = "Водительское удостоверение должно содержать 10 цифр")
-    @NotEmpty(message = "Введите Водительское удостоверение")
     private String drivingLicence;
 
     @ManyToMany(mappedBy = "personsAllowedToDrive")

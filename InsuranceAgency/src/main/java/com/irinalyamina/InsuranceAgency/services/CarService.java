@@ -15,12 +15,16 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
-    public List<Car> list(){
+    public List<Car> list() {
         return carRepository.findAll();
     }
 
     public Car create(Car car) {
         return carRepository.save(car);
+    }
+
+    public void edit(Car car) {
+        carRepository.save(car);
     }
 
     public Car getById(Long id) {
@@ -33,5 +37,9 @@ public class CarService {
 
     public boolean checkVin(String vin) {
         return carRepository.existsByVin(vin);
+    }
+
+    public boolean checkVinExceptId(Long id, String vin) {
+        return carRepository.existsByVinExceptId(id, vin);
     }
 }

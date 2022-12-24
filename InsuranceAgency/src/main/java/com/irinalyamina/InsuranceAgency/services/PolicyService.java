@@ -15,12 +15,20 @@ public class PolicyService {
         this.policyRepository = policyRepository;
     }
 
-    public List<Policy> list(){
+    public List<Policy> list() {
         return policyRepository.findAll();
     }
 
     public Policy getById(Long id) {
         return policyRepository.findById(id).get();
+    }
+
+    public Policy create(Policy policy) {
+        return policyRepository.save(policy);
+    }
+
+    public void edit(Policy policy) {
+        policyRepository.save(policy);
     }
 
     public void deleteById(Long id) {

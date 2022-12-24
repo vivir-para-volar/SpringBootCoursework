@@ -1,10 +1,7 @@
 package com.irinalyamina.InsuranceAgency.controllers;
 
-import com.irinalyamina.InsuranceAgency.Parse;
 import com.irinalyamina.InsuranceAgency.models.Car;
 import com.irinalyamina.InsuranceAgency.models.Policy;
-import com.irinalyamina.InsuranceAgency.models.Policyholder;
-import com.irinalyamina.InsuranceAgency.modelsForLayout.PolicyForList;
 import com.irinalyamina.InsuranceAgency.services.CarService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +31,7 @@ public class CarController {
     @GetMapping("/details/{id}")
     public String details(Model model, @PathVariable("id") Long id) {
         Car car = carService.getById(id);
-        List<PolicyForList> list = Parse.listPolicyToListPolicyForList(car.getPolicies());
+        List<Policy> list = car.getPolicies();
 
         model.addAttribute("car", car);
         model.addAttribute("policies", list);
@@ -49,7 +46,34 @@ public class CarController {
 
     @PostMapping("/create")
     public String createPost(@ModelAttribute("car") @Valid Car car, BindingResult bindingResult) {
-        if (carService.checkVin(car.getVin())) {
+        checkForUniqueness(car, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "car/create";
+        }
+
+        car = carService.create(car);
+        return "redirect:/car/details/" + car.getId();
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editGet(Model model, @PathVariable("id") Long id) {
+        model.addAttribute("car", carService.getById(id));
+        return "car/edit";
+    }
+
+    @PostMapping("/edit")
+    public String editPost(@ModelAttribute("car") @Valid Car car, BindingResult bindingResult) {
+        checkForUniqueness(car, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "car/edit";
+        }
+
+        carService.edit(car);
+        return "redirect:/car/details/" + car.getId();
+    }
+
+    private void checkForUniqueness(Car car, BindingResult bindingResult) {
+        if (checkVin(car)) {
             bindingResult.addError(new FieldError(
                     "car", "vin",
                     car.getVin(),
@@ -57,11 +81,13 @@ public class CarController {
                     "Данный VIN номер уже используется")
             );
         }
-        if (bindingResult.hasErrors()) {
-            return "car/create";
-        }
+    }
 
-        car = carService.create(car);
-        return "redirect:/car/details/" + car.getId();
+    private boolean checkVin(Car car) {
+        if (car.getId() == null) {
+            return carService.checkVin(car.getVin());
+        } else {
+            return carService.checkVinExceptId(car.getId(), car.getVin());
+        }
     }
 }

@@ -15,7 +15,7 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    public List<Employee> list(){
+    public List<Employee> list() {
         return employeeRepository.findAll();
     }
 
@@ -25,6 +25,10 @@ public class EmployeeService {
 
     public Employee create(Employee employee) {
         return employeeRepository.save(employee);
+    }
+
+    public void edit(Employee employee) {
+        employeeRepository.save(employee);
     }
 
     public void deleteById(Long id) {
@@ -41,5 +45,17 @@ public class EmployeeService {
 
     public boolean checkPassport(String passport) {
         return employeeRepository.existsByPassport(passport);
+    }
+
+    public boolean checkTelephoneExceptId(Long id, String telephone) {
+        return employeeRepository.existsByTelephoneExceptId(id, telephone);
+    }
+
+    public boolean checkEmailExceptId(Long id, String email) {
+        return employeeRepository.existsByEmailExceptId(id, email);
+    }
+
+    public boolean checkPassportExceptId(Long id, String passport) {
+        return employeeRepository.existsByPassportExceptId(id, passport);
     }
 }

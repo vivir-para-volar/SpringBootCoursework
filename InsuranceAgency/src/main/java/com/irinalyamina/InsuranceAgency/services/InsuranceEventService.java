@@ -4,6 +4,7 @@ import com.irinalyamina.InsuranceAgency.models.InsuranceEvent;
 import com.irinalyamina.InsuranceAgency.repositories.InsuranceEventRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -25,5 +26,9 @@ public class InsuranceEventService {
 
     public void deleteById(Long id) {
         insuranceEventRepository.deleteById(id);
+    }
+
+    public LocalDate searchMaxIncidentDateByPolicyId(Long policyId) {
+        return insuranceEventRepository.searchMaxIncidentDateByPolicyId(policyId);
     }
 }

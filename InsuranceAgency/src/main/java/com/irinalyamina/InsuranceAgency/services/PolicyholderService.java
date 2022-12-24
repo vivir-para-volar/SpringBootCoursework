@@ -27,9 +27,14 @@ public class PolicyholderService {
         return policyholderRepository.save(policyholder);
     }
 
-    public void deleteById(Long id) {
+    public void edit(Policyholder policyholder) {
+        policyholderRepository.save(policyholder);
+    }
+
+    public void delete(Long id) {
         policyholderRepository.deleteById(id);
     }
+
 
     public boolean checkTelephone(String telephone) {
         return policyholderRepository.existsByTelephone(telephone);
@@ -41,5 +46,17 @@ public class PolicyholderService {
 
     public boolean checkPassport(String passport) {
         return policyholderRepository.existsByPassport(passport);
+    }
+
+    public boolean checkTelephoneExceptId(Long id, String telephone) {
+        return policyholderRepository.existsByTelephoneExceptId(id, telephone);
+    }
+
+    public boolean checkEmailExceptId(Long id, String email) {
+        return policyholderRepository.existsByEmailExceptId(id, email);
+    }
+
+    public boolean checkPassportExceptId(Long id, String passport) {
+        return policyholderRepository.existsByPassportExceptId(id, passport);
     }
 }

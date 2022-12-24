@@ -1,9 +1,8 @@
 package com.irinalyamina.InsuranceAgency.controllers;
 
-import com.irinalyamina.InsuranceAgency.Parse;
-import com.irinalyamina.InsuranceAgency.models.Car;
 import com.irinalyamina.InsuranceAgency.models.PersonAllowedToDrive;
-import com.irinalyamina.InsuranceAgency.modelsForLayout.PolicyForList;
+import com.irinalyamina.InsuranceAgency.models.Policy;
+import com.irinalyamina.InsuranceAgency.models.Policyholder;
 import com.irinalyamina.InsuranceAgency.services.PersonAllowedToDriveService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,7 +32,7 @@ public class PersonAllowedToDriveController {
     @GetMapping("/details/{id}")
     public String details(Model model, @PathVariable("id") Long id) {
         PersonAllowedToDrive personAllowedToDrive = personAllowedToDriveService.getById(id);
-        List<PolicyForList> list = Parse.listPolicyToListPolicyForList(personAllowedToDrive.getPolicies());
+        List<Policy> list = personAllowedToDrive.getPolicies();
 
         model.addAttribute("personAllowedToDrive", personAllowedToDrive);
         model.addAttribute("policies", list);
@@ -48,19 +47,48 @@ public class PersonAllowedToDriveController {
 
     @PostMapping("/create")
     public String createPost(@ModelAttribute("personAllowedToDrive") @Valid PersonAllowedToDrive personAllowedToDrive, BindingResult bindingResult) {
-        if (personAllowedToDriveService.checkDriveRepository(personAllowedToDrive.getDrivingLicence())) {
-            bindingResult.addError(new FieldError(
-                    "personAllowedToDrive", "drivingLicence",
-                    personAllowedToDrive.getDrivingLicence(),
-                    false, null, null,
-                    "Данное водительское удостоверение уже используется")
-            );
-        }
+        checkForUniqueness(personAllowedToDrive, bindingResult);
         if (bindingResult.hasErrors()) {
             return "personAllowedToDrive/create";
         }
 
         personAllowedToDrive = personAllowedToDriveService.create(personAllowedToDrive);
         return "redirect:/personAllowedToDrive/details/" + personAllowedToDrive.getId();
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editGet(Model model, @PathVariable("id") Long id) {
+        model.addAttribute("personAllowedToDrive", personAllowedToDriveService.getById(id));
+        return "personAllowedToDrive/edit";
+    }
+
+    @PostMapping("/edit")
+    public String editPost(@ModelAttribute("personAllowedToDrive") @Valid PersonAllowedToDrive personAllowedToDrive, BindingResult bindingResult) {
+        checkForUniqueness(personAllowedToDrive, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "personAllowedToDrive/edit";
+        }
+
+        personAllowedToDriveService.edit(personAllowedToDrive);
+        return "redirect:/personAllowedToDrive/details/" + personAllowedToDrive.getId();
+    }
+
+    private void checkForUniqueness(PersonAllowedToDrive personAllowedToDrive, BindingResult bindingResult) {
+        if (checkDrivingLicence(personAllowedToDrive)) {
+            bindingResult.addError(new FieldError(
+                    "personAllowedToDrive", "drivingLicence",
+                    personAllowedToDrive.getDrivingLicence(),
+                    false, null, null,
+                    "Данное Водительское удостоверение уже используется")
+            );
+        }
+    }
+
+    private boolean checkDrivingLicence(PersonAllowedToDrive personAllowedToDrive) {
+        if (personAllowedToDrive.getId() == null) {
+            return personAllowedToDriveService.checkDrivingLicence(personAllowedToDrive.getDrivingLicence());
+        } else {
+            return personAllowedToDriveService.checkDrivingLicenceExceptId(personAllowedToDrive.getId(), personAllowedToDrive.getDrivingLicence());
+        }
     }
 }

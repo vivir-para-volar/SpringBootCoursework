@@ -1,8 +1,8 @@
 package com.irinalyamina.InsuranceAgency.controllers;
 
-import com.irinalyamina.InsuranceAgency.Parse;
+import com.irinalyamina.InsuranceAgency.models.Employee;
+import com.irinalyamina.InsuranceAgency.models.Policy;
 import com.irinalyamina.InsuranceAgency.models.Policyholder;
-import com.irinalyamina.InsuranceAgency.modelsForLayout.PolicyForList;
 import com.irinalyamina.InsuranceAgency.services.PolicyholderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +32,7 @@ public class PolicyholderController {
     @GetMapping("/details/{id}")
     public String details(Model model, @PathVariable("id") Long id) {
         Policyholder policyholder = policyholderService.getById(id);
-        List<PolicyForList> list = Parse.listPolicyToListPolicyForList(policyholder.getPolicies());
+        List<Policy> list = policyholder.getPolicies();
 
         model.addAttribute("policyholder", policyholder);
         model.addAttribute("policies", list);
@@ -47,15 +47,42 @@ public class PolicyholderController {
 
     @PostMapping("/create")
     public String createPost(@ModelAttribute("policyholder") @Valid Policyholder policyholder, BindingResult bindingResult) {
-        if (policyholderService.checkTelephone(policyholder.getTelephone())) {
+        checkForUniqueness(policyholder, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "policyholder/create";
+        }
+
+        policyholder = policyholderService.create(policyholder);
+        return "redirect:/policyholder/details/" + policyholder.getId();
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editGet(Model model, @PathVariable("id") Long id) {
+        model.addAttribute("policyholder", policyholderService.getById(id));
+        return "policyholder/edit";
+    }
+
+    @PostMapping("/edit")
+    public String editPost(@ModelAttribute("policyholder") @Valid Policyholder policyholder, BindingResult bindingResult) {
+        checkForUniqueness(policyholder, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "policyholder/edit";
+        }
+
+        policyholderService.edit(policyholder);
+        return "redirect:/policyholder/details/" + policyholder.getId();
+    }
+
+    private void checkForUniqueness(Policyholder policyholder, BindingResult bindingResult) {
+        if (checkTelephone(policyholder)) {
             bindingResult.addError(new FieldError(
                     "policyholder", "telephone",
                     policyholder.getTelephone(),
                     false, null, null,
-                    "Данный телефон уже используется")
+                    "Данный Телефон уже используется")
             );
         }
-        if (policyholderService.checkEmail(policyholder.getEmail())) {
+        if (checkEmail(policyholder)) {
             bindingResult.addError(new FieldError(
                     "policyholder", "email",
                     policyholder.getEmail(),
@@ -63,19 +90,37 @@ public class PolicyholderController {
                     "Данный Email уже используется")
             );
         }
-        if (policyholderService.checkPassport(policyholder.getPassport())) {
+        if (checkPassport(policyholder)) {
             bindingResult.addError(new FieldError(
                     "policyholder", "passport",
                     policyholder.getPassport(),
                     false, null, null,
-                    "Данный паспорт уже используется")
+                    "Данный Паспорт уже используется")
             );
         }
-        if (bindingResult.hasErrors()) {
-            return "policyholder/create";
-        }
+    }
 
-        policyholder = policyholderService.create(policyholder);
-        return "redirect:/policyholder/details/" + policyholder.getId();
+    private boolean checkTelephone(Policyholder policyholder) {
+        if (policyholder.getId() == null) {
+            return policyholderService.checkTelephone(policyholder.getTelephone());
+        } else{
+            return policyholderService.checkTelephoneExceptId(policyholder.getId(), policyholder.getTelephone());
+        }
+    }
+
+    private boolean checkEmail(Policyholder policyholder) {
+        if (policyholder.getId() == null) {
+            return policyholderService.checkEmail(policyholder.getEmail());
+        } else{
+            return policyholderService.checkEmailExceptId(policyholder.getId(), policyholder.getEmail());
+        }
+    }
+
+    private boolean checkPassport(Policyholder policyholder) {
+        if (policyholder.getId() == null) {
+            return policyholderService.checkPassport(policyholder.getPassport());
+        } else{
+            return policyholderService.checkPassportExceptId(policyholder.getId(), policyholder.getPassport());
+        }
     }
 }

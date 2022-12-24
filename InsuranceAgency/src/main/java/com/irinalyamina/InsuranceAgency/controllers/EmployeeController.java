@@ -1,8 +1,7 @@
 package com.irinalyamina.InsuranceAgency.controllers;
 
-import com.irinalyamina.InsuranceAgency.Parse;
 import com.irinalyamina.InsuranceAgency.models.Employee;
-import com.irinalyamina.InsuranceAgency.modelsForLayout.PolicyForList;
+import com.irinalyamina.InsuranceAgency.models.Policy;
 import com.irinalyamina.InsuranceAgency.services.EmployeeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +31,7 @@ public class EmployeeController {
     @GetMapping("/details/{id}")
     public String details(Model model, @PathVariable("id") Long id) {
         Employee employee = employeeService.getById(id);
-        List<PolicyForList> list = Parse.listPolicyToListPolicyForList(employee.getPolicies());
+        List<Policy> list = employee.getPolicies();
 
         model.addAttribute("employee", employee);
         model.addAttribute("policies", list);
@@ -47,15 +46,42 @@ public class EmployeeController {
 
     @PostMapping("/create")
     public String createPost(@ModelAttribute("employee") @Valid Employee employee, BindingResult bindingResult) {
-        if (employeeService.checkTelephone(employee.getTelephone())) {
+        checkForUniqueness(employee, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "employee/create";
+        }
+
+        employee = employeeService.create(employee);
+        return "redirect:/employee/details/" + employee.getId();
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editGet(Model model, @PathVariable("id") Long id) {
+        model.addAttribute("employee", employeeService.getById(id));
+        return "employee/edit";
+    }
+
+    @PostMapping("/edit")
+    public String editPost(@ModelAttribute("employee") @Valid Employee employee, BindingResult bindingResult) {
+        checkForUniqueness(employee, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "employee/edit";
+        }
+
+        employeeService.edit(employee);
+        return "redirect:/employee/details/" + employee.getId();
+    }
+
+    private void checkForUniqueness(Employee employee, BindingResult bindingResult) {
+        if (checkTelephone(employee)) {
             bindingResult.addError(new FieldError(
                     "employee", "telephone",
                     employee.getTelephone(),
                     false, null, null,
-                    "Данный телефон уже используется")
+                    "Данный Телефон уже используется")
             );
         }
-        if (employeeService.checkEmail(employee.getEmail())) {
+        if (checkEmail(employee)) {
             bindingResult.addError(new FieldError(
                     "employee", "email",
                     employee.getEmail(),
@@ -63,19 +89,37 @@ public class EmployeeController {
                     "Данный Email уже используется")
             );
         }
-        if (employeeService.checkPassport(employee.getPassport())) {
+        if (checkPassport(employee)) {
             bindingResult.addError(new FieldError(
                     "employee", "passport",
                     employee.getPassport(),
                     false, null, null,
-                    "Данный паспорт уже используется")
+                    "Данный Паспорт уже используется")
             );
         }
-        if (bindingResult.hasErrors()) {
-            return "employee/create";
-        }
+    }
 
-        employee = employeeService.create(employee);
-        return "redirect:/employee/details/" + employee.getId();
+    private boolean checkTelephone(Employee employee) {
+        if (employee.getId() == null) {
+            return employeeService.checkTelephone(employee.getTelephone());
+        } else{
+            return employeeService.checkTelephoneExceptId(employee.getId(), employee.getTelephone());
+        }
+    }
+
+    private boolean checkEmail(Employee employee) {
+        if (employee.getId() == null) {
+            return employeeService.checkEmail(employee.getEmail());
+        } else{
+            return employeeService.checkEmailExceptId(employee.getId(), employee.getEmail());
+        }
+    }
+
+    private boolean checkPassport(Employee employee) {
+        if (employee.getId() == null) {
+            return employeeService.checkPassport(employee.getPassport());
+        } else{
+            return employeeService.checkPassportExceptId(employee.getId(), employee.getPassport());
+        }
     }
 }
