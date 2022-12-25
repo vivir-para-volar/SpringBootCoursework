@@ -72,6 +72,27 @@ public class CarController {
         return "redirect:/car/details/" + car.getId();
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteGet(Model model, @PathVariable("id") Long id) {
+        Car car = carService.getById(id);
+        model.addAttribute("car", car);
+        model.addAttribute("hasPolicies", car.getPolicies().size() != 0);
+        return "car/delete";
+    }
+
+    @PostMapping("/delete")
+    public String deletePost(Model model, @ModelAttribute("car") Car car) {
+        Car carDelete = carService.getById(car.getId());
+        if (carDelete.getPolicies().size() != 0) {
+            model.addAttribute("car", carDelete);
+            model.addAttribute("hasPolicies", true);
+            return "car/delete";
+        }
+
+        carService.delete(carDelete.getId());
+        return "redirect:/car/list";
+    }
+
     private void checkForUniqueness(Car car, BindingResult bindingResult) {
         if (checkVin(car)) {
             bindingResult.addError(new FieldError(

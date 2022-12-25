@@ -1,6 +1,5 @@
 package com.irinalyamina.InsuranceAgency.controllers;
 
-import com.irinalyamina.InsuranceAgency.models.Employee;
 import com.irinalyamina.InsuranceAgency.models.Policy;
 import com.irinalyamina.InsuranceAgency.models.Policyholder;
 import com.irinalyamina.InsuranceAgency.services.PolicyholderService;
@@ -73,6 +72,27 @@ public class PolicyholderController {
         return "redirect:/policyholder/details/" + policyholder.getId();
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteGet(Model model, @PathVariable("id") Long id) {
+        Policyholder policyholder = policyholderService.getById(id);
+        model.addAttribute("policyholder", policyholder);
+        model.addAttribute("hasPolicies", policyholder.getPolicies().size() != 0);
+        return "policyholder/delete";
+    }
+
+    @PostMapping("/delete")
+    public String deletePost(Model model, @ModelAttribute("policyholder") Policyholder policyholder) {
+        Policyholder policyholderDelete = policyholderService.getById(policyholder.getId());
+        if (policyholderDelete.getPolicies().size() != 0) {
+            model.addAttribute("policyholder", policyholderDelete);
+            model.addAttribute("hasPolicies", true);
+            return "policyholder/delete";
+        }
+
+        policyholderService.delete(policyholderDelete.getId());
+        return "redirect:/policyholder/list";
+    }
+
     private void checkForUniqueness(Policyholder policyholder, BindingResult bindingResult) {
         if (checkTelephone(policyholder)) {
             bindingResult.addError(new FieldError(
@@ -103,7 +123,7 @@ public class PolicyholderController {
     private boolean checkTelephone(Policyholder policyholder) {
         if (policyholder.getId() == null) {
             return policyholderService.checkTelephone(policyholder.getTelephone());
-        } else{
+        } else {
             return policyholderService.checkTelephoneExceptId(policyholder.getId(), policyholder.getTelephone());
         }
     }
@@ -111,7 +131,7 @@ public class PolicyholderController {
     private boolean checkEmail(Policyholder policyholder) {
         if (policyholder.getId() == null) {
             return policyholderService.checkEmail(policyholder.getEmail());
-        } else{
+        } else {
             return policyholderService.checkEmailExceptId(policyholder.getId(), policyholder.getEmail());
         }
     }
@@ -119,7 +139,7 @@ public class PolicyholderController {
     private boolean checkPassport(Policyholder policyholder) {
         if (policyholder.getId() == null) {
             return policyholderService.checkPassport(policyholder.getPassport());
-        } else{
+        } else {
             return policyholderService.checkPassportExceptId(policyholder.getId(), policyholder.getPassport());
         }
     }

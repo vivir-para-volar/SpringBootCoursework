@@ -28,7 +28,7 @@ public class InsuranceEventService {
         return insuranceEventRepository.save(insuranceEvent);
     }
 
-    public void deleteById(Long id) {
+    public void delete(Long id) {
         insuranceEventRepository.deleteById(id);
     }
 

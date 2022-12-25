@@ -31,7 +31,7 @@ public class PolicyService {
         policyRepository.save(policy);
     }
 
-    public void deleteById(Long id) {
+    public void delete(Long id) {
         policyRepository.deleteById(id);
     }
 }

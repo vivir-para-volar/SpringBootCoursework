@@ -72,6 +72,27 @@ public class PersonAllowedToDriveController {
         return "redirect:/personAllowedToDrive/details/" + personAllowedToDrive.getId();
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteGet(Model model, @PathVariable("id") Long id) {
+        PersonAllowedToDrive personAllowedToDrive = personAllowedToDriveService.getById(id);
+        model.addAttribute("personAllowedToDrive", personAllowedToDrive);
+        model.addAttribute("hasPolicies", personAllowedToDrive.getPolicies().size() != 0);
+        return "personAllowedToDrive/delete";
+    }
+
+    @PostMapping("/delete")
+    public String deletePost(Model model, @ModelAttribute("personAllowedToDrive") PersonAllowedToDrive personAllowedToDrive) {
+        PersonAllowedToDrive personAllowedToDriveDelete = personAllowedToDriveService.getById(personAllowedToDrive.getId());
+        if (personAllowedToDriveDelete.getPolicies().size() != 0) {
+            model.addAttribute("personAllowedToDrive", personAllowedToDriveDelete);
+            model.addAttribute("hasPolicies", true);
+            return "personAllowedToDrive/delete";
+        }
+
+        personAllowedToDriveService.delete(personAllowedToDriveDelete.getId());
+        return "redirect:/personAllowedToDrive/list";
+    }
+
     private void checkForUniqueness(PersonAllowedToDrive personAllowedToDrive, BindingResult bindingResult) {
         if (checkDrivingLicence(personAllowedToDrive)) {
             bindingResult.addError(new FieldError(

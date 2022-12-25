@@ -2,6 +2,7 @@ package com.irinalyamina.InsuranceAgency.controllers;
 
 import com.irinalyamina.InsuranceAgency.models.Policy;
 import com.irinalyamina.InsuranceAgency.services.InsuranceEventService;
+import com.irinalyamina.InsuranceAgency.services.PersonAllowedToDriveService;
 import com.irinalyamina.InsuranceAgency.services.PolicyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,10 +19,12 @@ public class PolicyController {
 
     private final PolicyService policyService;
     private final InsuranceEventService insuranceEventService;
+    private final PersonAllowedToDriveService personAllowedToDriveService;
 
-    public PolicyController(PolicyService policyService, InsuranceEventService insuranceEventService) {
+    public PolicyController(PolicyService policyService, InsuranceEventService insuranceEventService, PersonAllowedToDriveService personAllowedToDriveService) {
         this.policyService = policyService;
         this.insuranceEventService = insuranceEventService;
+        this.personAllowedToDriveService = personAllowedToDriveService;
     }
 
     @GetMapping("/list")
@@ -51,6 +54,53 @@ public class PolicyController {
 
         policyService.edit(policy);
         return "redirect:/policy/details/" + policy.getId();
+    }
+
+    @GetMapping("/editPersonsAllowedToDrive/{policyId}")
+    public String editPersonsAllowedToDriveGet(Model model, @PathVariable("policyId") Long policyId) {
+        model.addAttribute("policy", policyService.getById(policyId));
+        model.addAttribute("listPersonsAllowedToDrive", personAllowedToDriveService.list());
+        return "policy/editPersonsAllowedToDrive";
+    }
+
+    @PostMapping("/editPersonsAllowedToDrive")
+    public String editPersonsAllowedToDrivePost(Model model, @ModelAttribute("policy") Policy policy, BindingResult bindingResult) {
+        if (policy.getPersonsAllowedToDrive().size() == 0) {
+            bindingResult.addError(new FieldError(
+                    "policy", "personsAllowedToDrive",
+                    policy.getPersonsAllowedToDrive(),
+                    false, null, null,
+                    "Выберите хотя бы одно лицо, допущенное к управлению")
+            );
+            model.addAttribute("listPersonsAllowedToDrive", personAllowedToDriveService.list());
+            return "policy/editPersonsAllowedToDrive";
+        }
+
+        Policy policyEdit = policyService.getById(policy.getId());
+        policyEdit.setPersonsAllowedToDrive(policy.getPersonsAllowedToDrive());
+        policyService.edit(policyEdit);
+        return "redirect:/policy/details/" + policyEdit.getId();
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteGet(Model model, @PathVariable("id") Long id) {
+        Policy policy = policyService.getById(id);
+        model.addAttribute("policy", policy);
+        model.addAttribute("hasInsuranceEvents", policy.getInsuranceEvents().size() != 0);
+        return "policy/delete";
+    }
+
+    @PostMapping("/delete")
+    public String deletePost(Model model, @ModelAttribute("policy") Policy policy) {
+        Policy policyDelete = policyService.getById(policy.getId());
+        if (policyDelete.getInsuranceEvents().size() != 0) {
+            model.addAttribute("policy", policyDelete);
+            model.addAttribute("hasInsuranceEvents", true);
+            return "policy/delete";
+        }
+
+        policyService.delete(policyDelete.getId());
+        return "redirect:/policy/list";
     }
 
     private void checkForErrors(Policy policy, BindingResult bindingResult) {

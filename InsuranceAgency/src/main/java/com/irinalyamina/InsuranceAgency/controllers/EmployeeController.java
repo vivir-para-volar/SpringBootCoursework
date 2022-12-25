@@ -72,6 +72,27 @@ public class EmployeeController {
         return "redirect:/employee/details/" + employee.getId();
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteGet(Model model, @PathVariable("id") Long id) {
+        Employee employee = employeeService.getById(id);
+        model.addAttribute("employee", employee);
+        model.addAttribute("hasPolicies", employee.getPolicies().size() != 0);
+        return "employee/delete";
+    }
+
+    @PostMapping("/delete")
+    public String deletePost(Model model, @ModelAttribute("employee") Employee employee) {
+        Employee employeeDelete = employeeService.getById(employee.getId());
+        if (employeeDelete.getPolicies().size() != 0) {
+            model.addAttribute("employee", employeeDelete);
+            model.addAttribute("hasPolicies", employeeDelete.getPolicies().size() != 0);
+            return "employee/delete";
+        }
+
+        employeeService.delete(employeeDelete.getId());
+        return "redirect:/employee/list";
+    }
+
     private void checkForUniqueness(Employee employee, BindingResult bindingResult) {
         if (checkTelephone(employee)) {
             bindingResult.addError(new FieldError(
@@ -102,7 +123,7 @@ public class EmployeeController {
     private boolean checkTelephone(Employee employee) {
         if (employee.getId() == null) {
             return employeeService.checkTelephone(employee.getTelephone());
-        } else{
+        } else {
             return employeeService.checkTelephoneExceptId(employee.getId(), employee.getTelephone());
         }
     }
@@ -110,7 +131,7 @@ public class EmployeeController {
     private boolean checkEmail(Employee employee) {
         if (employee.getId() == null) {
             return employeeService.checkEmail(employee.getEmail());
-        } else{
+        } else {
             return employeeService.checkEmailExceptId(employee.getId(), employee.getEmail());
         }
     }
@@ -118,7 +139,7 @@ public class EmployeeController {
     private boolean checkPassport(Employee employee) {
         if (employee.getId() == null) {
             return employeeService.checkPassport(employee.getPassport());
-        } else{
+        } else {
             return employeeService.checkPassportExceptId(employee.getId(), employee.getPassport());
         }
     }

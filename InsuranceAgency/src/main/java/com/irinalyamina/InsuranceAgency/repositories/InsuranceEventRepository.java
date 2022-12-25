@@ -12,4 +12,5 @@ public interface InsuranceEventRepository extends JpaRepository<InsuranceEvent, 
             value = "SELECT MAX(incident_date) FROM insurance_event WHERE policy_id = :policyId",
             nativeQuery = true)
     LocalDate searchMaxIncidentDateByPolicyId(Long policyId);
+
 }

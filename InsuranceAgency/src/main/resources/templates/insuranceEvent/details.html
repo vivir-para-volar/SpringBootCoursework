@@ -16,12 +16,13 @@
 
 <div class="container pt-3 pb-5">
     <h2>Подробнее о страховом случае</h2>
-    <hr />
+    <hr/>
 
     <div class="mb-5">
         <dl class="row">
             <dt class="col-sm-4 col-lg-3">Дата</dt>
-            <dd class="col-sm-8 col-lg-9" th:text="${#temporals.format(insuranceEvent.incidentDate, 'dd.MM.yyyy')}"></dd>
+            <dd class="col-sm-8 col-lg-9"
+                th:text="${#temporals.format(insuranceEvent.incidentDate, 'dd.MM.yyyy')}"></dd>
 
             <dt class="col-sm-4 col-lg-3">Страховая выплата</dt>
             <dd class="col-sm-8 col-lg-9" th:text="${insuranceEvent.insurancePayment}"></dd>
@@ -58,7 +59,8 @@
             <dd class="col-sm-8 col-lg-9" th:text="${policy.policyholder.fullName}"></dd>
 
             <dt class="col-sm-4 col-lg-3">Дата рождения</dt>
-            <dd class="col-sm-8 col-lg-9" th:text="${#temporals.format(policy.policyholder.birthday, 'dd.MM.yyyy')}"></dd>
+            <dd class="col-sm-8 col-lg-9"
+                th:text="${#temporals.format(policy.policyholder.birthday, 'dd.MM.yyyy')}"></dd>
 
             <dt class="col-sm-4 col-lg-3">Номер телефона</dt>
             <dd class="col-sm-8 col-lg-9" th:text="${policy.policyholder.telephone}"></dd>

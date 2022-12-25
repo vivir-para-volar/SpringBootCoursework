@@ -1,6 +1,6 @@
 package com.irinalyamina.InsuranceAgency.controllers;
 
-import com.irinalyamina.InsuranceAgency.extendedModels.InsuranceEventExtended;
+import com.irinalyamina.InsuranceAgency.modelsForLayout.InsuranceEventExtended;
 import com.irinalyamina.InsuranceAgency.models.InsuranceEvent;
 import com.irinalyamina.InsuranceAgency.services.InsuranceEventService;
 import com.irinalyamina.InsuranceAgency.services.PolicyService;
@@ -64,6 +64,20 @@ public class InsuranceEventController {
 
         insuranceEvent = insuranceEventService.create(insuranceEvent);
         return "redirect:/policy/details/" + insuranceEvent.getPolicy().getId();
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteGet(Model model, @PathVariable("id") Long id) {
+        InsuranceEvent insuranceEvent = insuranceEventService.getById(id);
+        model.addAttribute("insuranceEvent", insuranceEvent);
+        model.addAttribute("policy", insuranceEvent.getPolicy());
+        return "insuranceEvent/delete";
+    }
+
+    @PostMapping("/delete")
+    public String deletePost(Model model, @ModelAttribute("insuranceEvent") InsuranceEvent insuranceEvent) {
+        insuranceEventService.delete(insuranceEvent.getId());
+        return "redirect:/insuranceEvent/list";
     }
 
     private void checkForErrors(InsuranceEvent insuranceEvent, BindingResult bindingResult) {

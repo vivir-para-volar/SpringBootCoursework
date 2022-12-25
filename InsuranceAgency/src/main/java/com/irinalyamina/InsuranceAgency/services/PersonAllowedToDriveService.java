@@ -31,7 +31,7 @@ public class PersonAllowedToDriveService {
         personAllowedToDriveRepository.save(personAllowedToDrive);
     }
 
-    public void deleteById(Long id) {
+    public void delete(Long id) {
         personAllowedToDriveRepository.deleteById(id);
     }
 

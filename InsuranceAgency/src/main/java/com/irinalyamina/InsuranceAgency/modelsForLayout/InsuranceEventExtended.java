@@ -1,4 +1,4 @@
-package com.irinalyamina.InsuranceAgency.extendedModels;
+package com.irinalyamina.InsuranceAgency.modelsForLayout;
 
 import com.irinalyamina.InsuranceAgency.models.*;
 import lombok.Getter;

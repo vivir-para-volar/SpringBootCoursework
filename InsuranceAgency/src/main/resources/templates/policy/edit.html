@@ -100,7 +100,9 @@
 
     <p>
         <a class="link-dark" th:href="@{'/insuranceEvent/create/' + ${policy.id}}">Добавить страховой случай</a> |
-        <a class="link-dark" th:href="@{/policy/list}">Лица, допущенные к управлению</a> |
+        <a class="link-dark" th:href="@{'/policy/editPersonsAllowedToDrive/' + ${policy.id}}">
+            Лица, допущенные к управлению
+        </a> |
         <a class="link-dark" th:href="@{/policy/list}">Вернуться к списку</a>
     </p>
 </div>

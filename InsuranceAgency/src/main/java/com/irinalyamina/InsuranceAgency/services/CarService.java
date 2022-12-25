@@ -31,7 +31,7 @@ public class CarService {
         return carRepository.findById(id).get();
     }
 
-    public void deleteById(Long id) {
+    public void delete(Long id) {
         carRepository.deleteById(id);
     }
 
