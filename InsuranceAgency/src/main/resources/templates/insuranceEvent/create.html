@@ -15,9 +15,10 @@
 <div th:replace="~{menu :: navigation}"></div>
 
 <div class="container pt-3 pb-5">
-    <h2 class="pb-2">Изменение информации о полисе</h2>
-    <h4>Добавление страхового случая</h4>
+    <h2>Изменение информации о полисе</h2>
     <hr/>
+
+    <h4 class="pb-4 pt-2">Добавление страхового случая</h4>
 
     <div class="mb-5">
         <form action="#" th:action="@{/insuranceEvent/create/}" th:object="${insuranceEvent}" method="post">

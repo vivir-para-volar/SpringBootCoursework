@@ -15,14 +15,21 @@
 <div th:replace="~{menu :: navigation}"></div>
 
 <div class="container pt-3 pb-5">
-    <h2>Изменение информации о полисе</h2>
+    <h2>Добавление полиса</h2>
     <hr/>
 
-    <h4 class="pb-4 pt-2">Лица, допущенные к управлению</h4>
+    <h4 class="pb-4 pt-2">Выберите лица, допущенные к управлению</h4>
 
     <div class="mb-5">
-        <form action="#" th:action="@{/policy/editPersonsAllowedToDrive}" th:object="${policy}" method="post">
-            <input th:field="*{id}" type="number" hidden>
+        <form action="#" th:action="@{/policy/create/choosePersonsAllowedToDrive}" th:object="${policy}" method="post">
+            <input th:field="*{insuranceType}" hidden>
+            <input th:field="*{insurancePremium}" type="number" hidden>
+            <input th:field="*{insuranceAmount}" type="number" hidden>
+            <input th:field="*{dateOfConclusion}" type="date" hidden>
+            <input th:field="*{expirationDate}" type="date" hidden>
+            <input th:field="*{policyholder}" hidden>
+            <input th:field="*{car}" hidden>
+            <input th:field="*{employee}" hidden>
 
             <table class="table">
                 <thead>
@@ -55,10 +62,6 @@
             </div>
         </form>
     </div>
-
-    <p>
-        <a class="link-dark" th:href="@{'/policy/edit/' + ${policy.id}}">Вернуться</a>
-    </p>
 </div>
 
 <!-- JavaScript Bundle with Popper -->

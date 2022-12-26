@@ -57,6 +57,9 @@ public class InsuranceEventController {
 
     @PostMapping("/create")
     public String createPost(@ModelAttribute("insuranceEvent") @Valid InsuranceEvent insuranceEvent, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "insuranceEvent/create";
+        }
         checkForErrors(insuranceEvent, bindingResult);
         if (bindingResult.hasErrors()) {
             return "insuranceEvent/create";

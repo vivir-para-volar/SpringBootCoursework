@@ -47,7 +47,10 @@ public class PolicyController {
 
     @PostMapping("/edit")
     public String editPost(@ModelAttribute("policy") @Valid Policy policy, BindingResult bindingResult) {
-        checkForErrorsDuringEdit(policy, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "policy/edit";
+        }
+        checkForErrors(policy, bindingResult);
         if (bindingResult.hasErrors()) {
             return "policy/edit";
         }
@@ -72,6 +75,9 @@ public class PolicyController {
                     false, null, null,
                     "Выберите хотя бы одно лицо, допущенное к управлению")
             );
+        }
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("policy", policy);
             model.addAttribute("listPersonsAllowedToDrive", personAllowedToDriveService.list());
             return "policy/editPersonsAllowedToDrive";
         }
@@ -112,14 +118,6 @@ public class PolicyController {
                     "Страховая премия не может быть меньше или равна 0")
             );
         }
-        if (policy.getInsuranceAmount() <= 0) {
-            bindingResult.addError(new FieldError(
-                    "policy", "insuranceAmount",
-                    policy.getInsuranceAmount(),
-                    false, null, null,
-                    "Страховая сумма не может быть меньше или равна 0")
-            );
-        }
         if (policy.getInsurancePremium() >= policy.getInsuranceAmount()) {
             bindingResult.addError(new FieldError(
                     "policy", "insurancePremium",
@@ -128,18 +126,6 @@ public class PolicyController {
                     "Страховая премия не может быть больше или равна Страховой сумме")
             );
         }
-        if (policy.getExpirationDate().isBefore(policy.getDateOfConclusion())) {
-            bindingResult.addError(new FieldError(
-                    "policy", "expirationDate",
-                    policy.getExpirationDate(),
-                    false, null, null,
-                    "Дата окончания действия не может быть меньше Даты заключения")
-            );
-        }
-    }
-
-    private void checkForErrorsDuringEdit(Policy policy, BindingResult bindingResult) {
-        checkForErrors(policy, bindingResult);
 
         Policy policyOld = policyService.getById(policy.getId());
         if (policy.getExpirationDate().isAfter(policyOld.getExpirationDate())) {
@@ -148,6 +134,14 @@ public class PolicyController {
                     policy.getExpirationDate(),
                     false, null, null,
                     "Срок действия полиса нельзя увеличить")
+            );
+        }
+        if (policy.getExpirationDate().isBefore(policy.getDateOfConclusion())) {
+            bindingResult.addError(new FieldError(
+                    "policy", "expirationDate",
+                    policy.getExpirationDate(),
+                    false, null, null,
+                    "Дата окончания действия не может быть меньше Даты заключения")
             );
         }
 
