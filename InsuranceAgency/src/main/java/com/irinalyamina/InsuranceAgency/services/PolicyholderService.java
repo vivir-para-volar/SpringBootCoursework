@@ -23,6 +23,10 @@ public class PolicyholderService {
         return policyholderRepository.findById(id).get();
     }
 
+    public Policyholder getByEmail(String email) {
+        return policyholderRepository.findByEmail(email).get();
+    }
+
     public Policyholder create(Policyholder policyholder) {
         return policyholderRepository.save(policyholder);
     }

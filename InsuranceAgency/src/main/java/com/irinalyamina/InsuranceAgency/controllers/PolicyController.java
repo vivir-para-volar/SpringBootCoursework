@@ -1,9 +1,13 @@
 package com.irinalyamina.InsuranceAgency.controllers;
 
 import com.irinalyamina.InsuranceAgency.models.Policy;
+import com.irinalyamina.InsuranceAgency.models.Policyholder;
 import com.irinalyamina.InsuranceAgency.services.InsuranceEventService;
 import com.irinalyamina.InsuranceAgency.services.PersonAllowedToDriveService;
 import com.irinalyamina.InsuranceAgency.services.PolicyService;
+import com.irinalyamina.InsuranceAgency.services.PolicyholderService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,17 +24,29 @@ public class PolicyController {
     private final PolicyService policyService;
     private final InsuranceEventService insuranceEventService;
     private final PersonAllowedToDriveService personAllowedToDriveService;
+    private final PolicyholderService policyholderService;
 
-    public PolicyController(PolicyService policyService, InsuranceEventService insuranceEventService, PersonAllowedToDriveService personAllowedToDriveService) {
+    public PolicyController(PolicyService policyService, InsuranceEventService insuranceEventService, PersonAllowedToDriveService personAllowedToDriveService, PolicyholderService policyholderService) {
         this.policyService = policyService;
         this.insuranceEventService = insuranceEventService;
         this.personAllowedToDriveService = personAllowedToDriveService;
+        this.policyholderService = policyholderService;
     }
 
     @GetMapping("/list")
     public String list(Model model) {
         model.addAttribute("policies", policyService.list());
         return "policy/list";
+    }
+
+    @GetMapping("/listUser")
+    public String listUser(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Policyholder policyholder = policyholderService.getByEmail(email);
+        model.addAttribute("policies", policyholder.getPolicies());
+        return "policy/listUser";
     }
 
     @GetMapping("/details/{id}")

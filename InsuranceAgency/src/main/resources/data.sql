@@ -30,10 +30,10 @@ insert into photo(id, path, upload_date, car_id) values
 (13, '34b7e4as-960.jpg', '2022-12-09', 7);
 
 insert into policyholder(id, full_name, birthday, telephone, email, passport) values
-(1, 'Шестаков Даниил Данилович', '1990-01-01', '89969798752', 'aspshestakovdaniil@gmail.com', '4395200670'),
+(1, 'Шестаков Даниил Данилович', '1990-01-01', '89969798752', 'shestakov@gmail.com', '4395200670'),
 (2, 'Бессонов Иван Савельевич', '1971-01-16', '89180741287', null, '7330729340'),
 (3, 'Морозова Софья Яновна', '1979-08-15', '89347650895', 'aspmorozovasofi@gmail.com', '2218864204'),
-(4, 'Гаврилов Борис Дмитриевич', '1999-03-15', '89017654595', 'laba4laba44@gmail.com', '7818864232'),
+(4, 'Гаврилов Борис Дмитриевич', '1999-03-15', '89017654595', 'gavrilov@gmail.com', '7818864232'),
 (5, 'Колесова Эмилия Тимофеевна', '1991-11-08', '89217652333', null, '1134711573'),
 (6, 'Корнилов Ярослав Максимович', '1976-01-12', '89200755299', null, '1220729563');
 
@@ -76,3 +76,12 @@ insert into insurance_event(id, incident_date, insurance_payment, description, p
 (3, '2021-11-22', 1000, 'ДТП произошло в результате столкновения двух транспортных средств; Гражданская ответственность обоих владельцев застрахована по ОСАГО; Вред причинен только этим двум транспортным средствам; Страхователь не является виновником ДТП', 4),
 (4, '2022-02-14', 21000, 'ДТП произошло в результате столкновения двух транспортных средств; Гражданская ответственность обоих владельцев застрахована по ОСАГО; Вред причинен только этим двум транспортным средствам; Страхователь - виновник ДТП', 4),
 (5, '2022-04-19', 2500, 'ДТП произошло в результате столкновения двух транспортных средств; Гражданская ответственность обоих владельцев застрахована по ОСАГО; Вред причинен только этим двум транспортным средствам; Страхователь - виновник ДТП', 6);
+
+--insert into user_security(id, username, email, password, enabled, authority) values
+--(1, 'AgencyAdmin', 'agencyaadm@gmail.com', 'AgencyAdmin', true, 'ADMIN'),
+--(2, 'mishina', 'mishina@mail.ru', 'mishina', true, 'OPERATOR'),
+--(3, 'novikov', 'novikov@mail.ru', 'novikov', true, 'OPERATOR'),
+--(4, 'aleksandrov', 'aleksandrov@mail.ru', 'aleksandrov', true, 'OPERATOR'),
+--(5, 'morozova', 'morozova@mail.ru', 'morozova', true, 'OPERATOR'),
+--(6, 'gavrilov', 'laba4laba44@gmail.com', 'gavrilov', true, 'USER'),
+--(7, 'shestakov', 'aspshestakovdaniil@gmail.com', 'shestakov', true, 'USER');

@@ -11,7 +11,15 @@
 </head>
 <body>
 
-<div th:replace="~{menu :: navigation}"></div>
+<div th:if="${not authenticated}">
+    <div th:replace="~{menuDefault :: navigation}"></div>
+</div>
+<div th:if="${authenticated and user}">
+    <div th:replace="~{menuUser :: navigation}"></div>
+</div>
+<div th:if="${authenticated and not user}">
+    <div th:replace="~{menu :: navigation}"></div>
+</div>
 
 <div class="container p-3 p-md-5 text-center">
     <div class="row">

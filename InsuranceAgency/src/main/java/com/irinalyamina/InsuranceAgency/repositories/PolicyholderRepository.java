@@ -4,7 +4,11 @@ import com.irinalyamina.InsuranceAgency.models.Policyholder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface PolicyholderRepository extends JpaRepository<Policyholder, Long> {
+
+    Optional<Policyholder> findByEmail(String email);
 
     boolean existsByTelephone(String telephone);
 
