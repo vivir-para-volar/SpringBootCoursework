@@ -14,6 +14,21 @@ insert into car(id, model, vin, registration_plate, vehicle_passport) values
 (6, 'Opel Astra H', '1GCESBFE2C8192977', 'ЛО839Р23', '45ТФ893489'),
 (7, 'Mazda 626 IV', '12343HJKKL4564320', '239GHj67', '1237767833');
 
+insert into photo(id, path, upload_date, car_id) values
+(1, '88f7e05s-960.jpg', '2021-10-07', 1),
+(2, 'fabeb6s-960.jpg', '2021-10-07', 1),
+(3, '30c0cas-960.jpg', '2021-10-01', 2),
+(4, 'WDZ4OyI0uP8MIzVeV0vUx7FHc08-480.jpg', '2021-10-01', 2),
+(5, '2duHfUNCY.jpg', '2021-06-15', 3),
+(6, 'gen270_1121631.jpg', '2021-06-15', 3),
+(7, 'Megane-4-Sedan-550x300.jpg', '2021-06-15', 3),
+(8, 'rover_45_2004-600.jpg', '2020-11-11', 4),
+(9, 'big_91446_1.jpg', '2020-11-11', 4),
+(10, 'c437bd3eb_800x400.jpg', '2021-08-05', 5),
+(11, 'big_1131762.jpg', '2022-10-11', 6),
+(12, 'QdMQLSYxdx.jpg', '2022-10-11', 6),
+(13, '34b7e4as-960.jpg', '2022-12-09', 7);
+
 insert into policyholder(id, full_name, birthday, telephone, email, passport) values
 (1, 'Шестаков Даниил Данилович', '1990-01-01', '89969798752', 'aspshestakovdaniil@gmail.com', '4395200670'),
 (2, 'Бессонов Иван Савельевич', '1971-01-16', '89180741287', null, '7330729340'),

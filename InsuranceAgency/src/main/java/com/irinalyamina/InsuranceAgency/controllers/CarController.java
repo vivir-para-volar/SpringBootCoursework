@@ -1,15 +1,20 @@
 package com.irinalyamina.InsuranceAgency.controllers;
 
+import com.irinalyamina.InsuranceAgency.InteractionPhoto;
 import com.irinalyamina.InsuranceAgency.models.Car;
+import com.irinalyamina.InsuranceAgency.models.Photo;
 import com.irinalyamina.InsuranceAgency.models.Policy;
+import com.irinalyamina.InsuranceAgency.modelsForLayout.PhotoLayout;
 import com.irinalyamina.InsuranceAgency.services.CarService;
+import com.irinalyamina.InsuranceAgency.services.PhotoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -17,9 +22,11 @@ import java.util.List;
 public class CarController {
 
     private final CarService carService;
+    private final PhotoService photoService;
 
-    public CarController(CarService carService) {
+    public CarController(CarService carService, PhotoService photoService) {
         this.carService = carService;
+        this.photoService = photoService;
     }
 
     @GetMapping("/list")
@@ -34,42 +41,80 @@ public class CarController {
         List<Policy> list = car.getPolicies();
 
         model.addAttribute("car", car);
+        try {
+            List<PhotoLayout> photos = InteractionPhoto.getPhotos(carService.getById(id));
+            model.addAttribute("photos", photos);
+        } catch (Exception exp) {
+            model.addAttribute("photos", null);
+        }
         model.addAttribute("policies", list);
         return "car/details";
-    }
-
-    @GetMapping("/create")
-    public String createGet(Model model) {
-        model.addAttribute("car", new Car());
-        return "car/create";
-    }
-
-    @PostMapping("/create")
-    public String createPost(@ModelAttribute("car") @Valid Car car, BindingResult bindingResult) {
-        checkForUniqueness(car, bindingResult);
-        if (bindingResult.hasErrors()) {
-            return "car/create";
-        }
-
-        car = carService.create(car);
-        return "redirect:/car/details/" + car.getId();
     }
 
     @GetMapping("/edit/{id}")
     public String editGet(Model model, @PathVariable("id") Long id) {
         model.addAttribute("car", carService.getById(id));
-        return "car/edit";
+        try {
+            List<PhotoLayout> photos = InteractionPhoto.getPhotos(carService.getById(id));
+            model.addAttribute("photos", photos);
+        } catch (Exception exp) {
+            model.addAttribute("photos", null);
+        }
+        return "car/edit/edit";
     }
 
     @PostMapping("/edit")
     public String editPost(@ModelAttribute("car") @Valid Car car, BindingResult bindingResult) {
-        checkForUniqueness(car, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "car/edit";
+            return "car/edit/edit";
         }
 
         carService.edit(car);
         return "redirect:/car/details/" + car.getId();
+    }
+
+    @GetMapping("/deletePhoto/{photoId}")
+    public String deletePhotoGet(Model model, @PathVariable("photoId") Long photoId) {
+        Photo photo = photoService.getById(photoId);
+        model.addAttribute("photo", photo);
+        try {
+            PhotoLayout photoLayout = InteractionPhoto.getPhoto(photo);
+            model.addAttribute("image", photoLayout.getPhoto());
+        } catch (Exception exp) {
+            model.addAttribute("image", null);
+        }
+        return "car/edit/deletePhoto";
+    }
+
+    @PostMapping("/deletePhoto")
+    public String deletePhotoPost(@ModelAttribute("photo") Photo photo) {
+        photoService.delete(photo.getId());
+        InteractionPhoto.deletePhoto(photo);
+        return "redirect:/car/details/" + photo.getCar().getId();
+    }
+
+    @GetMapping("/addPhoto/{carId}")
+    public String addPhotoGet(Model model, @PathVariable("carId") Long carId) {
+        model.addAttribute("carId", carId);
+        return "car/edit/addPhoto";
+    }
+
+    @PostMapping("/addPhoto/{carId}")
+    public String addPhotoPost(Model model, @PathVariable("carId") Long carId, @RequestParam("image") MultipartFile file) {
+        String fileName;
+        try {
+            fileName = InteractionPhoto.uploadImage(file, carId);
+        } catch (Exception exp) {
+            return "redirect:/car/details/" + carId;
+        }
+
+        var photo = new Photo();
+        photo.setPath(fileName);
+        photo.setUploadDate(LocalDate.now());
+        photo.setCar(carService.getById(carId));
+        photoService.create(photo);
+
+        return "redirect:/car/details/" + carId;
     }
 
     @GetMapping("/delete/{id}")
@@ -91,24 +136,5 @@ public class CarController {
 
         carService.delete(carDelete.getId());
         return "redirect:/car/list";
-    }
-
-    private void checkForUniqueness(Car car, BindingResult bindingResult) {
-        if (checkVin(car)) {
-            bindingResult.addError(new FieldError(
-                    "car", "vin",
-                    car.getVin(),
-                    false, null, null,
-                    "Данный VIN номер уже используется")
-            );
-        }
-    }
-
-    private boolean checkVin(Car car) {
-        if (car.getId() == null) {
-            return carService.checkVin(car.getVin());
-        } else {
-            return carService.checkVinExceptId(car.getId(), car.getVin());
-        }
     }
 }

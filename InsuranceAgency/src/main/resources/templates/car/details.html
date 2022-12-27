@@ -35,6 +35,27 @@
     </div>
 
     <div class="mb-5">
+        <br/>
+        <h4 class="pb-2">Фотографии автомобиля</h4>
+        <table class="table">
+            <thead>
+            <tr>
+                <td>Дата загрузки</td>
+                <td>Фото</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="photo : ${photos}">
+                <td th:text="${#temporals.format(photo.uploadDate, 'dd.MM.yyyy')}"/>
+                <td>
+                    <img width="200" th:src="|data:image/jpeg;base64,${photo.photo}|"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mb-5">
         <h4 class="pb-2">Полисы, оформленные на автомобиль</h4>
         <table class="table">
             <thead>

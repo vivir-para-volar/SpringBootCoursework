@@ -64,7 +64,33 @@
         </form>
     </div>
 
+    <div class="mb-5">
+        <br/>
+        <h4 class="pb-2">Фотографии автомобиля</h4>
+        <table class="table">
+            <thead>
+            <tr>
+                <td>Дата загрузки</td>
+                <td>Фото</td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="photo : ${photos}">
+                <td th:text="${#temporals.format(photo.uploadDate, 'dd.MM.yyyy')}"/>
+                <td>
+                    <img width="200" th:src="|data:image/jpeg;base64,${photo.photo}|"/>
+                </td>
+                <td>
+                    <a class="btn btn-outline-danger" th:href="@{'/car/deletePhoto/' + ${photo.id}}">Удалить</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
     <p>
+        <a class="link-dark" th:href="@{'/car/addPhoto/' + ${car.id}}">Добавить фотографию</a> |
         <a class="link-dark" th:href="@{/car/list}">Вернуться к списку</a>
     </p>
 </div>
