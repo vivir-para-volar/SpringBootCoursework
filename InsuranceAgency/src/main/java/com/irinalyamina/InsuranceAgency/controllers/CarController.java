@@ -134,6 +134,9 @@ public class CarController {
             return "car/delete";
         }
 
+        for (var photo: carDelete.getPhotos()) {
+            photoService.delete(photo.getId());
+        }
         carService.delete(carDelete.getId());
         return "redirect:/car/list";
     }

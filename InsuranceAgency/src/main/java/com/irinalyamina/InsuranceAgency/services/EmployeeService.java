@@ -23,6 +23,10 @@ public class EmployeeService {
         return employeeRepository.findById(id).get();
     }
 
+    public Employee getByEmail(String email) {
+        return employeeRepository.findByEmail(email).get();
+    }
+
     public Employee create(Employee employee) {
         return employeeRepository.save(employee);
     }

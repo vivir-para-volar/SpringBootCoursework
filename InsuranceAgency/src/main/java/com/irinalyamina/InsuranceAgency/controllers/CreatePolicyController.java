@@ -1,9 +1,12 @@
 package com.irinalyamina.InsuranceAgency.controllers;
 
 import com.irinalyamina.InsuranceAgency.models.Car;
+import com.irinalyamina.InsuranceAgency.models.Employee;
 import com.irinalyamina.InsuranceAgency.models.Policy;
 import com.irinalyamina.InsuranceAgency.models.Policyholder;
 import com.irinalyamina.InsuranceAgency.services.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -70,10 +73,16 @@ public class CreatePolicyController {
         }
 
         Policy policy = new Policy();
+
         policy.setExpirationDate(LocalDate.now());
         policy.setPolicyholder(policyholder);
         policy.setCar(car);
-        policy.setEmployee(employeeService.getById(1L));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Employee employee = employeeService.getByEmail(email);
+        policy.setEmployee(employee);
+
         model.addAttribute("policy", policy);
         return "policy/create/chooseInfo";
     }
